@@ -13,13 +13,28 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Criar um funcionário automaticamente ao iniciar a aplicação
+//adicionei só de teste enquanto desenvolvia a aplicação
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<RegistroContext>();
+
+    // Adicione um funcionário com um ID inicial
+    if (!context.RegistroPonto.Any())
+    {
+        context.RegistroPonto.Add(new RegistroPonto { Id = 1 });
+        context.SaveChanges();
+    }
+}
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
