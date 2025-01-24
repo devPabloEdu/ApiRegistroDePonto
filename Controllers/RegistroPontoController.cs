@@ -128,12 +128,12 @@ namespace RegistroDePontosApi.Controllers
         public async Task<IActionResult> RegistroAlmoço(int id)
         {
             var dataAtual = DateTime.Today;
-            // Verificar se já existe um registro de ponto para o funcionário no dia atual
+            
             var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
 
             if (registroPonto == null)
             {
-                // Criar novo registro de ponto para o dia atual
+                //refatorar depois
                 registroPonto = new RegistroPonto
                 {
                     FuncionarioId = id,
@@ -147,14 +147,14 @@ namespace RegistroDePontosApi.Controllers
             }
             else if (registroPonto.PontoDeAlmoço == null)
             {
-                // Atualizar ponto de entrada caso ele ainda não tenha sido registrado
+                
                 registroPonto.PontoDeAlmoço = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return Ok(registroPonto);
             }
             else
             {
-                // Retornar erro caso o ponto de entrada já tenha sido registrado
+                
                 return BadRequest("Ponto de Almoço já registrado para hoje.");
             }
         }
