@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegistroDePontosApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RegistroDePontosApi.Controllers
 {
@@ -24,14 +25,14 @@ namespace RegistroDePontosApi.Controllers
 
 
         // GET: api/RegistroPonto
-        [HttpGet]
+        [HttpGet,Authorize]
         public async Task<ActionResult<IEnumerable<RegistroPonto>>> GetRegistroPonto()
         {
             return await _context.RegistroPonto.ToListAsync();
         }
 
         // GET: api/RegistroPonto/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"),Authorize]
         public async Task<ActionResult<RegistroPonto>> GetRegistroPonto(int id)
         {
             var registroPonto = await _context.RegistroPonto.FindAsync(id);
@@ -48,7 +49,7 @@ namespace RegistroDePontosApi.Controllers
 
         // PUT: api/RegistroPonto/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"),Authorize]
         public async Task<IActionResult> PutRegistroPonto(int id, RegistroPonto registroPonto)
         {
             if (id != registroPonto.Id)
@@ -81,7 +82,7 @@ namespace RegistroDePontosApi.Controllers
 
         // POST: api/RegistroPonto
         //Removi anteriormente o post que enviava todos os registros de uma vez só, agora, ele vai registrar de acordo com a rota selecionada
-        [HttpPost]
+        [HttpPost,Authorize]
         public async Task<ActionResult<RegistroPonto>> PostRegistroPonto()
         {
             var registroPonto = new RegistroPonto();
@@ -90,7 +91,7 @@ namespace RegistroDePontosApi.Controllers
 
             return CreatedAtAction(nameof(GetRegistroPonto), new { id = registroPonto.Id }, registroPonto);
         }
-        [HttpPost("{id}/entrada")]
+        [HttpPost("{id}/entrada"),Authorize]
         public async Task<IActionResult> RegistrarEntrada(int id)
         {
             var dataAtual = DateTime.Today;
@@ -124,7 +125,7 @@ namespace RegistroDePontosApi.Controllers
                 return BadRequest("Ponto de entrada já registrado para hoje.");
             }
         }
-        [HttpPost("{id}/almoco")]
+        [HttpPost("{id}/almoco"),Authorize]
         public async Task<IActionResult> RegistroAlmoço(int id)
         {
             var dataAtual = DateTime.Today;
@@ -158,7 +159,7 @@ namespace RegistroDePontosApi.Controllers
                 return BadRequest("Ponto de Almoço já registrado para hoje.");
             }
         }
-        [HttpPost("{id}/retorno")]
+        [HttpPost("{id}/retorno"),Authorize]
         public async Task<IActionResult> RegistroRetorno(int id)
         {
             var dataAtual = DateTime.Today;
@@ -192,7 +193,7 @@ namespace RegistroDePontosApi.Controllers
                 return BadRequest("Ponto de Retorno do almoço já registrado para hoje.");
             }
         }
-        [HttpPost("{id}/saida")]
+        [HttpPost("{id}/saida"),Authorize]
         public async Task<IActionResult> RegistroSaida(int id)
         {
             var dataAtual = DateTime.Today;
@@ -229,7 +230,7 @@ namespace RegistroDePontosApi.Controllers
 
 
         // DELETE: api/RegistroPonto/5
-        [HttpDelete("{id}/entrada")]
+        [HttpDelete("{id}/entrada"),Authorize]
         public async Task<IActionResult> DeleteEntrada(int id)
         {
             var registroPonto = await _context.RegistroPonto.FindAsync(id);
@@ -243,7 +244,7 @@ namespace RegistroDePontosApi.Controllers
 
             return NoContent();
         }
-        [HttpDelete("{id}/almoco")]
+        [HttpDelete("{id}/almoco"),Authorize]
         public async Task<IActionResult> DeleteAlmoco(int id)
         {
             var registroPonto = await _context.RegistroPonto.FindAsync(id);
@@ -257,7 +258,7 @@ namespace RegistroDePontosApi.Controllers
 
             return NoContent();
         }
-        [HttpDelete("{id}/retorno")]
+        [HttpDelete("{id}/retorno"),Authorize]
         public async Task<IActionResult> DeleteRetorno(int id)
         {
             var registroPonto = await _context.RegistroPonto.FindAsync(id);
@@ -271,7 +272,7 @@ namespace RegistroDePontosApi.Controllers
 
             return NoContent();
         }
-        [HttpDelete("{id}/saida")]
+        [HttpDelete("{id}/saida"),Authorize]
         public async Task<IActionResult> DeleteSaida(int id)
         {
             var registroPonto = await _context.RegistroPonto.FindAsync(id);
