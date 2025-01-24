@@ -93,54 +93,138 @@ namespace RegistroDePontosApi.Controllers
         [HttpPost("{id}/entrada")]
         public async Task<IActionResult> RegistrarEntrada(int id)
         {
-            var registroPonto = await _context.RegistroPonto.FindAsync(id);
-            if(registroPonto == null)
-            {
-                return NotFound();
-            }
+            var dataAtual = DateTime.Today;
+            // Verificar se já existe um registro de ponto para o funcionário no dia atual
+            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
 
-            registroPonto.PontoDeEntrada = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return Ok(registroPonto);
+            if (registroPonto == null)
+            {
+                // Criar novo registro de ponto para o dia atual
+                registroPonto = new RegistroPonto
+                {
+                    FuncionarioId = id,
+                    Data = dataAtual,
+                    PontoDeEntrada = DateTime.Now
+                };
+
+                _context.RegistroPonto.Add(registroPonto);
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else if (registroPonto.PontoDeEntrada == null)
+            {
+                // Atualizar ponto de entrada caso ele ainda não tenha sido registrado
+                registroPonto.PontoDeEntrada = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else
+            {
+                // Retornar erro caso o ponto de entrada já tenha sido registrado
+                return BadRequest("Ponto de entrada já registrado para hoje.");
+            }
         }
         [HttpPost("{id}/almoco")]
         public async Task<IActionResult> RegistroAlmoço(int id)
         {
-            var registroPonto = await _context.RegistroPonto.FindAsync(id);
-            if(registroPonto == null)
-            {
-                return NotFound();
-            }
+            var dataAtual = DateTime.Today;
+            // Verificar se já existe um registro de ponto para o funcionário no dia atual
+            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
 
-            registroPonto.PontoDeAlmoço = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return Ok(registroPonto);
+            if (registroPonto == null)
+            {
+                // Criar novo registro de ponto para o dia atual
+                registroPonto = new RegistroPonto
+                {
+                    FuncionarioId = id,
+                    Data = dataAtual,
+                    PontoDeAlmoço = DateTime.Now
+                };
+
+                _context.RegistroPonto.Add(registroPonto);
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else if (registroPonto.PontoDeAlmoço == null)
+            {
+                // Atualizar ponto de entrada caso ele ainda não tenha sido registrado
+                registroPonto.PontoDeAlmoço = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else
+            {
+                // Retornar erro caso o ponto de entrada já tenha sido registrado
+                return BadRequest("Ponto de Almoço já registrado para hoje.");
+            }
         }
         [HttpPost("{id}/retorno")]
         public async Task<IActionResult> RegistroRetorno(int id)
         {
-            var registroPonto = await _context.RegistroPonto.FindAsync(id);
-            if(registroPonto == null)
-            {
-                return NotFound();
-            }
+            var dataAtual = DateTime.Today;
+            // Verificar se já existe um registro de ponto para o funcionário no dia atual
+            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
 
-            registroPonto.PontoDeVoltaAlmoço = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return Ok(registroPonto);
+            if (registroPonto == null)
+            {
+                // Criar novo registro de ponto para o dia atual
+                registroPonto = new RegistroPonto
+                {
+                    FuncionarioId = id,
+                    Data = dataAtual,
+                    PontoDeVoltaAlmoço = DateTime.Now
+                };
+
+                _context.RegistroPonto.Add(registroPonto);
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else if (registroPonto.PontoDeVoltaAlmoço == null)
+            {
+                // Atualizar ponto de entrada caso ele ainda não tenha sido registrado
+                registroPonto.PontoDeVoltaAlmoço = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else
+            {
+                // Retornar erro caso o ponto de entrada já tenha sido registrado
+                return BadRequest("Ponto de Retorno do almoço já registrado para hoje.");
+            }
         }
         [HttpPost("{id}/saida")]
         public async Task<IActionResult> RegistroSaida(int id)
         {
-            var registroPonto = await _context.RegistroPonto.FindAsync(id);
-            if(registroPonto == null)
-            {
-                return NotFound();
-            }
+            var dataAtual = DateTime.Today;
+            // Verificar se já existe um registro de ponto para o funcionário no dia atual
+            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
 
-            registroPonto.PontoDeSaída = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return Ok(registroPonto);
+            if (registroPonto == null)
+            {
+                // Criar novo registro de ponto para o dia atual
+                registroPonto = new RegistroPonto
+                {
+                    FuncionarioId = id,
+                    Data = dataAtual,
+                    PontoDeSaída = DateTime.Now
+                };
+
+                _context.RegistroPonto.Add(registroPonto);
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else if (registroPonto.PontoDeSaída == null)
+            {
+                // Atualizar ponto de entrada caso ele ainda não tenha sido registrado
+                registroPonto.PontoDeSaída = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return Ok(registroPonto);
+            }
+            else
+            {
+                // Retornar erro caso o ponto de entrada já tenha sido registrado
+                return BadRequest("Ponto de Saída já registrado para hoje.");
+            }
         }
 
 

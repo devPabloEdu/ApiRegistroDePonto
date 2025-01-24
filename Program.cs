@@ -3,6 +3,7 @@ using RegistroDePontosApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,7 +23,8 @@ using (var scope = app.Services.CreateScope())
     // Adicione um funcionário com um ID inicial
     if (!context.RegistroPonto.Any())
     {
-        context.RegistroPonto.Add(new RegistroPonto { Id = 1 });
+        context.RegistroPonto.Add(new RegistroPonto { FuncionarioId = 1 });
+        context.RegistroPonto.Add(new RegistroPonto { FuncionarioId = 2 });
         context.SaveChanges();
     }
 }
