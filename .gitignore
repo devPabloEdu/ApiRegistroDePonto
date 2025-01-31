@@ -1,3 +1,4 @@
 # Ignorar arquivos de configuração local
 appsettings.json
 obj/
+bin/Debug/net8.0/
