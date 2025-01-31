@@ -7,8 +7,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;   
 using RegistroDePontosApi.Models;
+using Microsoft.EntityFrameworkCore;
 namespace RegistroDePontosApi.Controllers
 {
     [ApiController]
@@ -16,19 +17,24 @@ namespace RegistroDePontosApi.Controllers
     public class AuthenticationController : ControllerBase
     {
         private IConfiguration _config;
-        public AuthenticationController(IConfiguration Configuration)
+        private readonly RegistroContext _context;
+        public AuthenticationController(IConfiguration Configuration, RegistroContext context)
         {
             _config = Configuration;
+            _context = context;
         }
 
         [HttpPost, Route("Login")]
-        public IActionResult Login([FromBody]LoginViewModel user)
+        public async Task<IActionResult> Login([FromBody]LoginViewModel user)
         {
             if(user == null)
             {
                 return BadRequest("Request do cliente inválido");
             }
-            if (user.UserName == "Pablo" && user.Password == "Teste123")
+
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Username == user.Username);
+
+            if (user == null && user.PasswordHash == user.PasswordHash)
             {
                 var _secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
                 var _issuer = _config["https://localhost:5001"];
