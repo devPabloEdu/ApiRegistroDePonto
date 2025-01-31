@@ -34,10 +34,6 @@ builder.Services.AddAuthentication(opt => {
 
 var app = builder.Build();
 
-// Criar um funcionário automaticamente ao iniciar a aplicação
-//adicionei só de teste enquanto desenvolvia a aplicação
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
