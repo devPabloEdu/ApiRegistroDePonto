@@ -34,11 +34,13 @@ namespace RegistroDePontosApi.Controllers
 
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Username == user.Username);
 
-            if (user == null && user.PasswordHash == user.PasswordHash)
+            var senha = await _context.Usuarios.FirstOrDefaultAsync(u => u.PasswordHash == user.PasswordHash);
+
+            if (usuario != null && senha != null)
             {
                 var _secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-                var _issuer = _config["https://localhost:5001"];
-                var _audience = _config["https://localhost:5001"];
+                var _issuer = _config["Jwt:Issuer"];
+                var _audience = _config["Jwt:Audience"];
 
                 var signinCredentials = new SigningCredentials(_secretKey, SecurityAlgorithms.HmacSha256);
 
