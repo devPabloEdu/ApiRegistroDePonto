@@ -32,10 +32,10 @@ namespace RegistroDePontosApi.Controllers
         }
 
         // GET: api/RegistroPonto/5
-        [HttpGet("{id}"),Authorize]
-        public async Task<ActionResult<RegistroPonto>> GetRegistroPonto(int id)
+        [HttpGet("{FuncionarioId}"),Authorize]
+        public async Task<ActionResult<RegistroPonto>> GetRegistroPonto(int FuncionarioId)
         {
-            var registroPonto = await _context.RegistroPonto.FindAsync(id);
+            var registroPonto = await _context.RegistroPonto.FindAsync(FuncionarioId);
 
             if (registroPonto == null)
             {
@@ -91,19 +91,27 @@ namespace RegistroDePontosApi.Controllers
 
             return CreatedAtAction(nameof(GetRegistroPonto), new { id = registroPonto.Id }, registroPonto);
         }
-        [HttpPost("{id}/entrada"),Authorize]
-        public async Task<IActionResult> RegistrarEntrada(int id)
+        [HttpPost("{funcionarioId}/entrada"),Authorize]
+        public async Task<IActionResult> RegistrarEntrada(int funcionarioId)
         {
+                var token = Request.Headers["Authorization"].ToString();
+
+                // Verifique se o token foi enviado corretamente
+                if (string.IsNullOrEmpty(token) || !token.StartsWith("Bearer "))
+                {
+                    return Unauthorized("Token não fornecido.");
+                }
+                
             var dataAtual = DateTime.Today;
             // Verificar se já existe um registro de ponto para o funcionário no dia atual
-            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == id && r.Data == dataAtual);
+            var registroPonto = await _context.RegistroPonto.FirstOrDefaultAsync(r => r.FuncionarioId == funcionarioId && r.Data == dataAtual);
 
             if (registroPonto == null)
             {
                 // Criar novo registro de ponto para o dia atual
                 registroPonto = new RegistroPonto
                 {
-                    FuncionarioId = id,
+                    FuncionarioId = funcionarioId,
                     Data = dataAtual,
                     PontoDeEntrada = DateTime.Now
                 };
